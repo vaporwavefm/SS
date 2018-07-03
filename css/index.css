@@ -1,0 +1,13 @@
+body{
+    background-image: url('../img/img2.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Roboto Mono',
+    monospace;
+
+}
+
+#kss{
+    length: 50px;
+    width: 50px;
+}
