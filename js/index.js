@@ -1,74 +1,103 @@
+// Jorge Juarez - index.js
+// Used in conjunction with ../views/index.html
+let initiateGame = function(){
+    let canvas_width = 1200;
+    let canvas_length = 600;
+    //document.getElementById('main-canvas').style.width = '1200px';
+    //document.getElementById('main-canvas').style.height = '600px';
 
-let leftArrowPressed = function () {
-    var element = document.getElementById("kss");
-    if(element.style.left > '0px'){
-        element.style.left = parseInt(element.style.left) - 5 + 'px';
-        console.log("LEFT", element.style.left);
-    }
-};
-
-let rightArrowPressed = function() {
-    let element = document.getElementById("kss");
-    if(element.style.left != '300px'){
-        element.style.left = parseInt(element.style.left) + 5 + 'px';
-        console.log("RIGHT", element.style.left);
-    }
+    my_pen.drawImage(player1_ship.getShpImg(), player1_ship.getDx(), 
+        player1_ship.getDy(), player1_ship.getDWidth(), player1_ship.getDHeight());
     
-};
 
-let upArrowPressed = function() {
-    let element = document.getElementById("kss");
-    if(element.style.top > '0px'){
-        element.style.top = parseInt(element.style.top) - 5 + 'px';
-        console.log("UP", element.style.top);
-    }
-};
-
-let downArrowPressed = function() {
-    let element = document.getElementById("kss");
-    if(element.style.top != '500px'){
-        element.style.top = parseInt(element.style.top) + 5 + 'px';
-        console.log("DOWN", element.style.top);
-    }
-};
-
-let moveKirby = function(evt){
-    switch (evt.keyCode) {
-        case 37:
-            leftArrowPressed();
-            break;
-        case 39:
-            rightArrowPressed();
-            break;
-        case 38:
-            upArrowPressed();
-            break;
-        case 40:
-            downArrowPressed();
-            break;
-    }
-};
-
-let shoot = function(evt){
-    if(evt.keyCode == 32){
-        console.log("SPACE", parseInt(document.getElementById("kss").style.left) + 20);
-        cell = document.createElement("img");
-        //cell.setAttribute("src", "url('../img/kirbyss.png')");
-        //cell.style.position = "absolute";
-        cell.src = "../img/bullet.png";
-        cell.style.position = "absolute";
-        cell.id = "curr-bullet";
-        cell.style.left = parseInt(document.getElementById("kss").style.left) + 60 + 'px';
-        cell.style.top = parseInt(document.getElementById("kss").style.top) + 25 + 'px';
-        document.getElementById("maindiv").appendChild(cell);
-        for(let i = 0; i < 50; i++){
-            document.getElementById("curr-bullet").style.left = 
-            parseInt(document.getElementById("kss").style.left) + 60 + (5 * i) + 'px';
-        }
-    }
 }
 
-let lod = function(){
-    window.addEventListener('keydown', moveKirby);
-    window.addEventListener('keydown', shoot)
+let drawShip = function(dx){
+    my_pen.clearRect(0, 0, 1200,600);
+    my_pen.drawImage(player1_ship.getShpImg(), player1_ship.getDx(), 
+        player1_ship.getDy(), player1_ship.getDWidth(), player1_ship.getDHeight());
+}
+
+/*function buttonGotPressed(e){
+	if(e.key==" "){
+		ship.shoot();
+	}
+	if(e.key=="ArrowLeft"){
+		ship.x = ship.x - ship.speed;
+		if(ship.x<=0){
+			ship.x= 0;
+		}
+	}
+	if(e.key=="ArrowRight"){
+		ship.x = ship.x + ship.speed;
+		if(ship.x >= W-ship.w){
+			ship.x = W-ship.w;
+		}
+	}
+}
+*/
+
+let leftArrowPressed = function(player){
+    console.log("LEFT");
+    if(player.getDx() > 0){
+        player.setDx(player.getDx() - player.getVelocity());
+        drawShip();
+        console.log("X",player.getDx());
+    }
 };
+
+let rightArrowPressed = function(player){
+    console.log("RIGHT");
+    if(player.getDx() < 500){
+        player.setDx(player.getDx() + player.getVelocity());
+        drawShip();
+        console.log("X",player.getDx());
+    }
+};
+
+let upArrowPressed = function(player){
+    console.log("UP");
+    if(player.getDy() > 0){
+        player.setDy(player.getDy() - player.getVelocity());
+        drawShip();
+        console.log("Y",player.getDy());
+    }
+};
+
+let downArrowPressed = function(player){
+    console.log("DOWN");
+    if(player.getDy() < 350){
+        player.setDy(player.getDy() + player.getVelocity());
+        drawShip();
+        console.log("Y",player.getDy());
+    }
+};
+
+let kirbyShoot = function(){
+
+};
+
+let moveKirbyShip = function(evt){
+    switch (evt.keyCode) {
+        case 32:
+            kirbyShoot();
+        case 37:
+            leftArrowPressed(player1_ship);
+            break;
+        case 39:
+            rightArrowPressed(player1_ship);
+            break;
+        case 38:
+            upArrowPressed(player1_ship);
+            break;
+        case 40:
+            downArrowPressed(player1_ship);
+            break;
+    }
+};
+
+window.onload = function(){
+    document.addEventListener('keydown', moveKirbyShip);
+    initiateGame();
+}
+
