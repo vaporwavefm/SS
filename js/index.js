@@ -1,11 +1,5 @@
 // Jorge Juarez - ./js/index.js
 // Used in conjunction with ../views/index.html
-/*
-let initiateGame = function(){
-    my_pen.drawImage(player1_ship.getShpImg(), player1_ship.getDx(), 
-        player1_ship.getDy(), player1_ship.getDWidth(), player1_ship.getDHeight());
-}
-*/
 let drawShip = function(){
     //my_pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     my_pen.drawImage(player1_ship.getShpImg(), player1_ship.getDx(),
@@ -15,7 +9,7 @@ let drawShip = function(){
 let drawLaser = function (laser) {
     my_pen.drawImage(laser.getLsrImg(), laser.getDx(), laser.getDy(), laser.getDWidth(), laser.getDHeight());
     for(let i = 0; i< enemy_arr.length; i++){ // now, loop through the enemies if our laser is touching them
-        if (isEnemyTouchingSomething(enemy_arr[i], laser) == true) {
+        if (areTheyTouching(enemy_arr[i], laser) == true) {
             enemy_arr.splice(i,1);
             score_content = parseInt(score_content) + 100;
             document.getElementById("scoreboard").innerHTML = score_content ;
@@ -66,14 +60,26 @@ let moveEnemy = function(enemy){
             enemy.setDx(enemy.getDx() - (enemy.getVelocity() / 2));
         }
         else{
-
+            // TODO: uhhh hmm...
         }
     }
     return true;
 }
 
 let movePup = function(pup){
-    pup.setDx(pup.getDx() - pup.getVelocity());
+    if(pup.getDx() <= -100){
+        return false;
+    }
+    else{
+        pup.setDx(pup.getDx() - pup.getVelocity());
+    }
+    return true;
+};
+
+let setPowerUp = function(pup, player){
+    if(pup.getPUpId() == "ice"){
+        player.setVelocity(player.getVelocity() / 2);
+    }
 };
 
 let checkCurrLevel = function(){
@@ -83,7 +89,6 @@ let checkCurrLevel = function(){
 let pickRandomEnemy = function(){
     return enemyspr_arr[Math.floor(Math.random() * 3)];
 };
-
 
 let drawTheWholeGame = function(){
     my_pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // first, let's clear the canvas
@@ -102,32 +107,36 @@ let drawTheWholeGame = function(){
         let temp_enemy = new Enemy(newEnSpr, CANVAS_WIDTH + 5, rand2 , ENEMY_WIDTH, ENEMY_HEIGHT, 5);
         enemy_arr.push(temp_enemy);
     }
-    if(rand < .1){
+    if(rand < .01){
         if(rand2 - 20 <= 40){ // it bugs me that i can see the sprite getting cut off at the top of the canvas
             rand2 = 80; // so let's set a static destination height if the predefined random height is too small
         }
-        let temp_pUp = new PowerUp(ice_pupspr, CANVAS_WIDTH + 5, rand2 - 40, PUP_WIDTH, PUP_HEIGHT, 5);
+        let temp_pUp = new PowerUp(ice_pupspr, "ice", CANVAS_WIDTH + 5, rand2 - 40, PUP_WIDTH, PUP_HEIGHT, 5);
         console.log("PUP:", temp_pUp.getPUpImg());
         pup_arr.push(temp_pUp);
     }
     for(let i = 0; i< enemy_arr.length; i++){
-        if (isEnemyTouchingSomething(enemy_arr[i], player1_ship) == true) {
+        if (areTheyTouching(enemy_arr[i], player1_ship) == true) {
             did_we_lose_yet = true;
         }
         drawEnemy(enemy_arr[i]);
     }
     
     for(let i = 0; i < pup_arr.length; i++){
+        if(areTheyTouching(pup_arr[i], player1_ship) == true){
+            setPowerUp(pup_arr[i], player1_ship);
+            pup_arr.splice(pup_arr[i], 1);
+        }
         drawPup(pup_arr[i]);
     }
 
 }
 
-let isEnemyTouchingSomething = function(enemy, otherthing){
-    let x_diff = Math.abs(enemy.getDx() - otherthing.getDx());
-    let y_diff = Math.abs(enemy.getDy() - otherthing.getDy());
-    let max_width = 40;
-    let max_height = 40;
+let areTheyTouching = function(thing, otherthing){
+    let x_diff = Math.abs(thing.getDx() - otherthing.getDx());
+    let y_diff = Math.abs(thing.getDy() - otherthing.getDy());
+    let max_width = 30;
+    let max_height = 30;
     if(x_diff <= max_width && y_diff <= max_height)
         return true;
     return false;
@@ -217,8 +226,8 @@ let loopGame = function(){
     }
     else{
         console.log("We lost"); // she just lost her last life
-        //my_pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        window.requestAnimationFrame(loopGame);
+        my_pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        //window.requestAnimationFrame(loopGame);
         document.getElementById("gamestatus").innerHTML = "GAME OVER, FINAL LEVEL REACHED: " + current_level;
     }
 }; 

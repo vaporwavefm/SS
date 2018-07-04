@@ -4,13 +4,15 @@
 let PowerUp = (
     function () {
         let pUpImgSymbol = Symbol('pUpImg');
+        let pUpIdSymbol = Symbol('pUpId');
         let dxSymbol = Symbol('dx');
         let dySymbol = Symbol('dy');
         let dWidthSymbol = Symbol('dWidth');
         let dHeightSymbol = Symbol('dHeight');
         let velocitySymbol = Symbol('velocity');
-        function PowerUp(pUpImg, dx, dy, dWidth, dHeight, velocity) {
+        function PowerUp(pUpImg, pUpId, dx, dy, dWidth, dHeight, velocity) {
             this[pUpImgSymbol] = pUpImg;
+            this[pUpIdSymbol] = pUpId;
             this[dxSymbol] = dx;
             this[dySymbol] = dy;
             this[dWidthSymbol] = dWidth;
@@ -20,6 +22,9 @@ let PowerUp = (
         PowerUp.prototype.getPUpImg = function () {
             return this[pUpImgSymbol]; 
         };
+        PowerUp.prototype.getPUpId = function(){
+            return this[pUpIdSymbol];
+        }
         PowerUp.prototype.getDx = function () {
             return this[dxSymbol];
         };
