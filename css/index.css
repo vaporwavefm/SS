@@ -1,5 +1,5 @@
 body{
-    background-image: url('../img/bg/img2.gif');
+    background-image: url('../img/bg/img4.gif');
     background-repeat: no-repeat;
     background-size: cover;
     font-family: 'Roboto Mono',
@@ -20,7 +20,3 @@ body{
     /**/
 }
 
-#kss{
-    length: 50px;
-    width: 50px;
-}

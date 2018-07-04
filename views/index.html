@@ -17,8 +17,8 @@
     <div class="container navbar navbar-expand">
         <ul class="navbar-nav">
             <a href="index.html" class="navbar-brand"> SPACE </a>
-            <li class = "nav-item"> 
-                <a href="https://github.com/jjuarez2902" class="nav-link">Github</a>  
+            <li class="nav-item">
+                <a href = "about.html" class = "nav-link"> How To Play</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" 
@@ -31,6 +31,9 @@
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
+            <li class = "nav-item"> 
+                <a href="https://github.com/jjuarez2902" class="nav-link">Github</a>  
+            </li>
             
         </ul>
     </div>
@@ -41,10 +44,17 @@
     </div>
     
     <div class="container">
-        Score: <span> 000000 </span>
+        Score: <span id = "scoreboard">  0   </span> <br>
+    </div>
+    <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+    <br> <br> <br> <br> <br> <br> 
+    <div class="container">
+        <span id="gamestatus"> Game In Progress/ Level 1</span>
     </div>
     <script src = "../js/Ship.js"></script>
     <script src = "../js/Laser.js"></script>
+    <script src = "../js/Enemy.js"></script>
+    <script src = "../js/PowerUp.js"> </script>
     <script src = "../js/Globals.js"></script>
     <script src = "../js/index.js"> </script>
 </body>

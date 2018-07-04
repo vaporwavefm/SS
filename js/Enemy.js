@@ -1,58 +1,56 @@
-// Jorge Juarez - ./js/Ship.js
-// used in conjunction with ../views/index.html
-// This file is designated to house the Ship class with all its wonderful features
-let Ship = (
+// Jorge Juarez : ./js/Enemy.js
+// Used in conjunction with ../views/index.html
+let Enemy = (
     function () {
-        let shpImgSymbol = Symbol('shp_img');
+        let enImgSymbol = Symbol('en_img');
         let dxSymbol = Symbol('dx');
         let dySymbol = Symbol('dy');
         let dWidthSymbol = Symbol('dWidth');
         let dHeightSymbol = Symbol('dHeight');
         let velocitySymbol = Symbol('velocity');
 
-        function Ship(shp_img, dx, dy, dWidth, dHeight, velocity) {
-            this[shpImgSymbol] = shp_img;
+        function Enemy(en_img, dx, dy, dWidth, dHeight, velocity) {
+            this[enImgSymbol] = en_img;
             this[dxSymbol] = dx;
             this[dySymbol] = dy;
             this[dWidthSymbol] = dWidth;
             this[dHeightSymbol] = dHeight;
             this[velocitySymbol] = velocity;
         };
-        Ship.prototype.getShpImg = function () {
-            return this[shpImgSymbol];
+        Enemy.prototype.getEnImg = function () {
+            return this[enImgSymbol];
         };
-        Ship.prototype.getDx = function () {
+        Enemy.prototype.getDx = function () {
             return this[dxSymbol];
         };
-        Ship.prototype.getDy = function () {
+        Enemy.prototype.getDy = function () {
             return this[dySymbol];
         };
-        Ship.prototype.getDWidth = function () {
+        Enemy.prototype.getDWidth = function () {
             return this[dWidthSymbol];
         };
-        Ship.prototype.getDHeight = function () {
+        Enemy.prototype.getDHeight = function () {
             return this[dHeightSymbol];
         };
-        Ship.prototype.getVelocity = function () {
+        Enemy.prototype.getVelocity = function () {
             return this[velocitySymbol];
         };
 
-        Ship.prototype.setDx = function (dx) {
+        Enemy.prototype.setDx = function (dx) {
             this[dxSymbol] = dx;
         };
-        Ship.prototype.setDy = function (dy) {
+        Enemy.prototype.setDy = function (dy) {
             this[dySymbol] = dy;
         };
-        Ship.prototype.setDWidth = function (dWidth) {
+        Enemy.prototype.setDWidth = function (dWidth) {
             this[dWidthSymbol] = dWidth;
         };
-        Ship.prototype.setDHeight = function (dHeight) {
+        Enemy.prototype.setDHeight = function (dHeight) {
             this[dHeightSymbol] = dHeight;
         };
-        Ship.prototype.setVelocity = function (velocity) {
+        Enemy.prototype.setVelocity = function (velocity) {
             this[velocitySymbol] = velocity;
         };
-        return Ship;
+        return Enemy;
     }
-
 )();
