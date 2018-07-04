@@ -10,7 +10,7 @@ let PowerUp = (
         let dWidthSymbol = Symbol('dWidth');
         let dHeightSymbol = Symbol('dHeight');
         let velocitySymbol = Symbol('velocity');
-        function PowerUp(pUpImg, pUpId, dx, dy, dWidth, dHeight, velocity) {
+        function PowerUp(pUpImg = ice_pupspr, pUpId = "ice", dx = 0, dy = 0, dWidth = 0, dHeight = 0, velocity = 0) {
             this[pUpImgSymbol] = pUpImg;
             this[pUpIdSymbol] = pUpId;
             this[dxSymbol] = dx;

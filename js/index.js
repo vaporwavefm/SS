@@ -1,10 +1,11 @@
 // Jorge Juarez - ./js/index.js
 // Used in conjunction with ../views/index.html
+
 let drawShip = function(){
     //my_pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     my_pen.drawImage(player1_ship.getShpImg(), player1_ship.getDx(),
         player1_ship.getDy(), player1_ship.getDWidth(), player1_ship.getDHeight());
-}
+} // draws the player ship on the canvas
 
 let drawLaser = function (laser) {
     my_pen.drawImage(laser.getLsrImg(), laser.getDx(), laser.getDy(), laser.getDWidth(), laser.getDHeight());
@@ -15,16 +16,23 @@ let drawLaser = function (laser) {
             document.getElementById("scoreboard").innerHTML = score_content ;
             return false;
         }
-    };
+    }; // draws the current laser object on the canvas
     return true;
 }
 
 let drawEnemy = function (enemy) {
     my_pen.drawImage(enemy.getEnImg(), enemy.getDx(), enemy.getDy(), enemy.getDWidth(), enemy.getDHeight());
-};
+}; // draws the current enemy object on the canvas
 
-let drawPup = function(pup){
+let drawPup = function(pup, player){
     my_pen.drawImage(pup.getPUpImg(), pup.getDx(), pup.getDy(), pup.getDWidth(), pup.getDHeight());
+   if(areTheyTouching(player1_ship, pup) == true){
+       console.log("TOUCH POWERUP", pup);
+       setPowerUp(pup, player);
+       pup_arr.splice(pup_arr.indexOf(pup), 1);
+   }
+   // not sure why, but powerups freeze the game when i touch them unless i define the setPowerUp function call
+   // here, and not in the main drawthewholegame function
 };
 
 let moveLaser = function(laser){
@@ -66,7 +74,7 @@ let moveEnemy = function(enemy){
     return true;
 }
 
-let movePup = function(pup){
+let movePup = function(pup){ // move the power-up, all power-ups move in a uniform fashion
     if(pup.getDx() <= -100){
         return false;
     }
@@ -77,8 +85,21 @@ let movePup = function(pup){
 };
 
 let setPowerUp = function(pup, player){
-    if(pup.getPUpId() == "ice"){
-        player.setVelocity(player.getVelocity() / 2);
+    if(pup.getPUpId() == "ice"){ // since ice powerup slows you down, let's make sure it doesn't completely slow you down
+        if(player.getVelocity() <= 2){
+            player.setVelocity(2);
+        }
+        else {
+            player.setVelocity(player.getVelocity() - 2);
+        }
+    }
+    if(pup.getPUpId() == "fire"){ // fire powerup speeds you up, let's make sure you're not going TOO fast
+        if(player.getVelocity() >= 15){
+            player.setVelocity(15);
+        }
+        else {
+            player.setVelocity(player.getVelocity() + 2);
+        }
     }
 };
 
@@ -87,64 +108,73 @@ let checkCurrLevel = function(){
 };
 
 let pickRandomEnemy = function(){
-    return enemyspr_arr[Math.floor(Math.random() * 3)];
+    return enemyspr_arr[Math.floor(Math.random() * enemyspr_arr.length)]; // pick a random sprite
 };
 
-let drawTheWholeGame = function(){
+let generateRandomPup = function(rand2){ // this generates a random Power-Up Object, and returns it
+    res = Math.floor(Math.random() * (pupspr_arr.length));
+    if(res == 0) { // ice
+        return new PowerUp(ice_pupspr, "ice", CANVAS_WIDTH + 5, rand2 - 40, PUP_WIDTH, PUP_HEIGHT, 5);
+    }
+    if(res == 1){ // fire
+        return new PowerUp(fire_pupspr, "fire", CANVAS_WIDTH + 5, rand2 - 40, PUP_WIDTH, PUP_HEIGHT, 5);
+    }
+    return new PowerUp(fire_pupspr, "ice", CANVAS_WIDTH + 5, rand2 - 40, PUP_WIDTH, PUP_HEIGHT, 5);
+    // idk im scares of unexpected boundary errors, so i just set a default value lol
+}
+
+let areTheyTouching = function(thing, otherthing){ // this compares the distances of two objects, returns true if below threshold
+    let x_diff = Math.abs(thing.getDx() - otherthing.getDx());
+    let y_diff = Math.abs(thing.getDy() - otherthing.getDy());
+    //let  = 40;
+    //let max_height = 40;
+    let threshold = 40;
+    if(x_diff <= threshold && y_diff <= threshold)
+        return true;
+    return false;
+}
+
+let drawTheWholeGame = function (level) {
     my_pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // first, let's clear the canvas
-    if(!did_we_lose_yet){
+    if (!did_we_lose_yet) {
         drawShip(); // now, let's draw the ship's current coordinates on canvas
     }
-    for(let i = 0; i< player1_lasers.length; i++){ // for each laser that the player has shot, let's move it
-        if(drawLaser(player1_lasers[i]) == false){ // should laser be out of view, take the laser out of the array
-            player1_lasers.splice(player1_lasers[i],1);
+    for (let i = 0; i < player1_lasers.length; i++) { // for each laser that the player has shot, let's move it
+        if (drawLaser(player1_lasers[i]) == false) { // should laser be out of view, take the laser out of the array
+            player1_lasers.splice(player1_lasers[i], 1);
         };
     }
     let rand = Math.random(); // let's generate a random number to see if an enemy should appear in this frame 
-    let rand2 = Math.floor(Math.random() * (CANVAS_HEIGHT - 5)) + 1;
-    if(rand < .999){
+    let rand2 = Math.floor(Math.random() * (CANVAS_HEIGHT - 5)) + 1; // this denotes which x height should it spawn at
+    if (rand < (.1 * level)) { // if the the rand variable is less than this, spawn the enemy!
         newEnSpr = pickRandomEnemy();
-        let temp_enemy = new Enemy(newEnSpr, CANVAS_WIDTH + 5, rand2 , ENEMY_WIDTH, ENEMY_HEIGHT, 5);
+        let temp_enemy = new Enemy(newEnSpr, CANVAS_WIDTH + 5, rand2, ENEMY_WIDTH, ENEMY_HEIGHT, 5);
         enemy_arr.push(temp_enemy);
     }
-    if(rand < .01){
-        if(rand2 - 20 <= 40){ // it bugs me that i can see the sprite getting cut off at the top of the canvas
+    if (rand < (.2 - (.01 * level) )){
+        if (rand2 - 20 <= 40) { // it bugs me that i can see the sprite getting cut off at the top of the canvas
             rand2 = 80; // so let's set a static destination height if the predefined random height is too small
         }
-        let temp_pUp = new PowerUp(ice_pupspr, "ice", CANVAS_WIDTH + 5, rand2 - 40, PUP_WIDTH, PUP_HEIGHT, 5);
+        //let temp_pUp = new PowerUp(ice_pupspr, "ice", CANVAS_WIDTH + 5, rand2 - 40, PUP_WIDTH, PUP_HEIGHT, 5);
+
+        let temp_pUp = generateRandomPup(rand2);
         console.log("PUP:", temp_pUp.getPUpImg());
         pup_arr.push(temp_pUp);
     }
-    for(let i = 0; i< enemy_arr.length; i++){
+
+    for (let i = 0; i < pup_arr.length; i++) {
+        drawPup(pup_arr[i], player1_ship);
+    }
+    for (let i = 0; i < enemy_arr.length; i++) {
         if (areTheyTouching(enemy_arr[i], player1_ship) == true) {
             did_we_lose_yet = true;
         }
         drawEnemy(enemy_arr[i]);
     }
-    
-    for(let i = 0; i < pup_arr.length; i++){
-        if(areTheyTouching(pup_arr[i], player1_ship) == true){
-            setPowerUp(pup_arr[i], player1_ship);
-            pup_arr.splice(pup_arr[i], 1);
-        }
-        drawPup(pup_arr[i]);
-    }
-
-}
-
-let areTheyTouching = function(thing, otherthing){
-    let x_diff = Math.abs(thing.getDx() - otherthing.getDx());
-    let y_diff = Math.abs(thing.getDy() - otherthing.getDy());
-    let max_width = 30;
-    let max_height = 30;
-    if(x_diff <= max_width && y_diff <= max_height)
-        return true;
-    return false;
-}
-
-let animateNextFrame = function(){
+};
+let animateNextFrame = function(){ // animate the next frame, aka move all Lasers, Enemies, and PowerUps
     for(let i = 0; i< player1_lasers.length; i++){
-        moveLaser(player1_lasers[i]);
+        moveLaser(player1_lasers[i]); 
     }
     for(let i = 0; i < enemy_arr.length; i++){
         moveEnemy(enemy_arr[i]);
@@ -165,7 +195,7 @@ let leftArrowPressed = function(player){
 
 let rightArrowPressed = function(player){
     console.log("RIGHT");
-    if (player.getDx() < (CANVAS_WIDTH / 3) ) {
+    if (player.getDx() < (CANVAS_WIDTH / 2) ) {
         player.setDx(player.getDx() + player.getVelocity());
         console.log("X",player.getDx());
     }
@@ -181,7 +211,7 @@ let upArrowPressed = function(player){
 
 let downArrowPressed = function(player){
     console.log("DOWN");
-    if(player.getDy() < (CANVAS_HEIGHT - 100)){
+    if(player.getDy() < (CANVAS_HEIGHT - 80)){
         player.setDy(player.getDy() + player.getVelocity());
         console.log("Y",player.getDy());
     }
@@ -216,10 +246,9 @@ let moveKirbyShip = function(evt){
 };
 
 let loopGame = function(){
-    drawTheWholeGame(); // first we draw the current frame of the game
+    drawTheWholeGame(current_level); // first we draw the current frame of the game
     animateNextFrame(); // now we draw the next frame of the game and animate it
-    console.log('in progess, frame: ', ani_frame_idx);
-    
+    //console.log('in progess, frame: ', ani_frame_idx);
     if(did_we_lose_yet == false){ // make sure we didn't lose yet
         window.requestAnimationFrame(loopGame);
         ani_frame_idx++; // add to the animation frame counter
@@ -228,6 +257,7 @@ let loopGame = function(){
         console.log("We lost"); // she just lost her last life
         my_pen.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         //window.requestAnimationFrame(loopGame);
+        document.removeEventListener('keydown', moveKirbyShip);
         document.getElementById("gamestatus").innerHTML = "GAME OVER, FINAL LEVEL REACHED: " + current_level;
     }
 }; 
@@ -237,4 +267,3 @@ window.onload = function(){
     document.addEventListener('keydown', moveKirbyShip);
     loopGame();
 }
-
