@@ -12,24 +12,13 @@
     <link rel="stylesheet" href="../css/index.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
 </head>
-<body>
+<body id="mainbody">
     <!--SPACE SPACE SPACE SPACE SPACE-->
     <div class="container navbar navbar-expand">
         <ul class="navbar-nav">
             <a href="index.html" class="navbar-brand"> SPACE </a>
             <li class="nav-item">
-                <a href = "about.html" class = "nav-link"> How To Play</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" 
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                 Set Background
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
+                <a href = "about.html" class = "nav-link"> Guide </a>
             </li>
             <li class = "nav-item"> 
                 <a href="https://github.com/jjuarez2902" class="nav-link">Github</a>  
@@ -44,12 +33,15 @@
     </div>
     
     <div class="container">
-        Score: <span id = "scoreboard">  0   </span> <br>
+        Score: <span id = "scoreboard">  0  </span> <span id = "announce-pow" style = "margin-left:30%"> </span>
+        <br>
     </div>
     <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
     <br> <br> <br> <br> <br> <br> 
     <div class="container">
-        <span id="gamestatus"> Game In Progress/ Level 1</span>
+        <span id="gamestatus"> Game In Progress/ Level <span id = "CURRENTSCORE">  </span> </span>
+        <span id = "shipcount"> </span> 
+        <span id = "bg-changer"> <img src = "../img/bg-button.gif" width = "30px" height = "30px">  </span>
     </div>
     <script src = "../js/Ship.js"></script>
     <script src = "../js/Laser.js"></script>

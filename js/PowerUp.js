@@ -10,7 +10,9 @@ let PowerUp = (
         let dWidthSymbol = Symbol('dWidth');
         let dHeightSymbol = Symbol('dHeight');
         let velocitySymbol = Symbol('velocity');
-        function PowerUp(pUpImg = ice_pupspr, pUpId = "ice", dx = 0, dy = 0, dWidth = 0, dHeight = 0, velocity = 0) {
+        let msgSymbol = Symbol('msg');
+        function PowerUp(pUpImg = ice_pupspr, pUpId = "ice", dx = 0, dy = 0, dWidth = 0, dHeight = 0, 
+                velocity = 0, msg) {
             this[pUpImgSymbol] = pUpImg;
             this[pUpIdSymbol] = pUpId;
             this[dxSymbol] = dx;
@@ -18,6 +20,7 @@ let PowerUp = (
             this[dWidthSymbol] = dWidth;
             this[dHeightSymbol] = dHeight;
             this[velocitySymbol] = velocity;
+            this[msgSymbol] = msg;
         }
         PowerUp.prototype.getPUpImg = function () {
             return this[pUpImgSymbol]; 
@@ -40,6 +43,9 @@ let PowerUp = (
         PowerUp.prototype.getVelocity = function () {
             return this[velocitySymbol];
         };
+        PowerUp.prototype.getMsg = function(){
+            return this[msgSymbol];
+        }
 
         PowerUp.prototype.setDx = function (dx) {
             this[dxSymbol] = dx;

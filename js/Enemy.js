@@ -8,14 +8,18 @@ let Enemy = (
         let dWidthSymbol = Symbol('dWidth');
         let dHeightSymbol = Symbol('dHeight');
         let velocitySymbol = Symbol('velocity');
+        let baseHPSymbol = Symbol('basehp');
+        let HPSymbol = Symbol('hp');
 
-        function Enemy(en_img, dx, dy, dWidth, dHeight, velocity) {
+        function Enemy(en_img, dx, dy, dWidth, dHeight, velocity, basehp, hp) {
             this[enImgSymbol] = en_img;
             this[dxSymbol] = dx;
             this[dySymbol] = dy;
             this[dWidthSymbol] = dWidth;
             this[dHeightSymbol] = dHeight;
             this[velocitySymbol] = velocity;
+            this[baseHPSymbol] = basehp;
+            this[HPSymbol] = hp;
         };
         Enemy.prototype.getEnImg = function () {
             return this[enImgSymbol];
@@ -35,7 +39,16 @@ let Enemy = (
         Enemy.prototype.getVelocity = function () {
             return this[velocitySymbol];
         };
+        Enemy.prototype.getBaseHP = function(){
+            return this[baseHPSymbol];
+        }
+        Enemy.prototype.getHP = function(){
+            return this[HPSymbol];
+        }
 
+        Enemy.prototype.setEnImg = function(enImg){
+            this[enImgSymbol] = enImg;
+        }
         Enemy.prototype.setDx = function (dx) {
             this[dxSymbol] = dx;
         };
@@ -51,6 +64,12 @@ let Enemy = (
         Enemy.prototype.setVelocity = function (velocity) {
             this[velocitySymbol] = velocity;
         };
+        Enemy.prototype.setBaseHP = function(basehp){
+            this[baseHPSymbol] = basehp;
+        }
+        Enemy.prototype.setHP = function(hp){
+            this[HPSymbol] = hp;
+        }
         return Enemy;
     }
 )();
